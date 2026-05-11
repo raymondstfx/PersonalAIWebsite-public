@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "AI Portfolio Demo",
+  title: "Xiyao Huang | AI Portfolio",
   description:
-    "A public Next.js AI portfolio demo with a server-side Gemini assistant.",
+    "A personal portfolio prototype for Xiyao Huang with a styled AI assistant preview.",
 };
 
 export default function RootLayout({

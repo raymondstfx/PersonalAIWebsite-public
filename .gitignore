@@ -1,18 +1,29 @@
-node_modules
-.next
-.vercel
-out
+node_modules/
+.next/
+.vercel/
+out/
 
 .env
 .env.local
 .env.*.local
+.env*.local
+!.env.example
+!.env.local.example
 
 .DS_Store
 *.log
+*.key
+*.pem
+*secret*
+*token*
 
-uploads
-knowledge
-documents
-private-data
-data/private
-docs/private
+uploads/
+knowledge/
+documents/
+private-data/
+data/private/
+docs/private/
+private-docs/
+transcripts/
+ranking proof/
+award certificates/

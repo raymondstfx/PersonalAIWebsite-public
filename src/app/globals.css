@@ -53,6 +53,8 @@ main {
   margin: 0 auto;
   max-width: 1160px;
   padding: 28px 24px 12px;
+  position: relative;
+  z-index: 10;
 }
 
 .brand {
@@ -63,14 +65,14 @@ main {
 .nav-links {
   align-items: center;
   display: flex;
-  gap: 8px;
+  gap: 4px;
 }
 
 .nav-links a {
   border-radius: 999px;
   color: var(--muted);
   font-size: 14px;
-  padding: 9px 12px;
+  padding: 9px 10px;
 }
 
 .nav-links a:hover {
@@ -78,11 +80,23 @@ main {
   color: var(--ink);
 }
 
+.menu-toggle {
+  align-items: center;
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid rgba(29, 36, 32, 0.1);
+  border-radius: 999px;
+  color: var(--ink);
+  display: none;
+  height: 40px;
+  justify-content: center;
+  width: 40px;
+}
+
 .hero {
   align-items: center;
   display: grid;
-  gap: 54px;
-  grid-template-columns: minmax(0, 1.12fr) minmax(300px, 0.88fr);
+  gap: 46px;
+  grid-template-columns: minmax(0, 1.28fr) minmax(280px, 0.72fr);
   margin: 0 auto;
   max-width: 1160px;
   min-height: calc(100vh - 88px);
@@ -144,6 +158,10 @@ h3 {
   margin-top: 26px;
 }
 
+.contact-row {
+  align-items: flex-start;
+}
+
 .primary-action,
 .secondary-action {
   align-items: center;
@@ -180,7 +198,7 @@ h3 {
   border-radius: 8px;
   box-shadow: var(--shadow);
   overflow: hidden;
-  width: min(100%, 430px);
+  width: min(100%, 370px);
   justify-self: end;
 }
 
@@ -247,7 +265,9 @@ footer {
 }
 
 .pill-grid,
-.project-list {
+.project-list,
+.publication-list,
+.experience-list {
   display: grid;
   gap: 14px;
 }
@@ -258,6 +278,8 @@ footer {
 
 .interest-pill,
 .project-card,
+.publication-card,
+.experience-card,
 .assistant-panel {
   background: rgba(255, 250, 241, 0.82);
   border: 1px solid rgba(29, 36, 32, 0.1);
@@ -272,12 +294,21 @@ footer {
 }
 
 .project-list {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  display: grid;
+  grid-auto-columns: minmax(290px, 360px);
+  grid-auto-flow: column;
+  grid-template-columns: none;
+  overflow-x: auto;
+  padding-bottom: 10px;
+  scroll-snap-type: x mandatory;
 }
 
 .project-card {
+  display: flex;
+  flex-direction: column;
   min-height: 218px;
   padding: 24px;
+  scroll-snap-align: start;
 }
 
 .project-card p {
@@ -285,16 +316,88 @@ footer {
   line-height: 1.55;
 }
 
+.project-card a {
+  align-items: center;
+  color: var(--accent-dark);
+  display: inline-flex;
+  font-weight: 750;
+  gap: 8px;
+  margin-top: auto;
+}
+
+.project-tech,
+.publication-note {
+  color: #3e4944;
+  font-size: 14px;
+  font-weight: 750;
+}
+
+.publication-list,
+.experience-list {
+  display: grid;
+  grid-auto-columns: minmax(310px, 430px);
+  grid-auto-flow: column;
+  grid-template-columns: none;
+  overflow-x: auto;
+  padding-bottom: 10px;
+  scroll-snap-type: x mandatory;
+}
+
+.publication-card,
+.experience-card {
+  padding: 24px;
+}
+
+.publication-card p,
+.experience-card p {
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.publication-card a {
+  align-items: center;
+  color: var(--accent-dark);
+  display: inline-flex;
+  font-weight: 750;
+  gap: 8px;
+}
+
+.publication-authors,
+.experience-org {
+  color: #3e4944;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.experience-card {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: 1fr;
+  scroll-snap-align: start;
+}
+
+.experience-card p:last-child {
+  grid-column: 1 / -1;
+  margin-bottom: 0;
+}
+
+.experience-period {
+  color: var(--accent-dark);
+  font-size: 14px;
+  font-weight: 750;
+  text-align: left;
+}
+
 .assistant-layout {
   align-items: center;
   display: grid;
-  gap: 42px;
-  grid-template-columns: minmax(0, 0.86fr) minmax(340px, 1.14fr);
+  gap: 34px;
+  grid-template-columns: minmax(220px, 0.58fr) minmax(460px, 1.42fr);
   padding-bottom: 84px;
 }
 
 .assistant-copy h2 {
-  font-size: 38px;
+  font-size: 34px;
 }
 
 .github-link {
@@ -342,8 +445,8 @@ footer {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  max-height: 380px;
-  min-height: 264px;
+  max-height: 440px;
+  min-height: 320px;
   overflow-y: auto;
   padding: 18px;
 }
@@ -449,7 +552,9 @@ footer {
 footer {
   border-top: 1px solid var(--line);
   color: var(--muted);
-  display: flex;
+  display: grid;
+  gap: 8px 18px;
+  grid-template-columns: repeat(4, auto);
   justify-content: space-between;
   padding-bottom: 32px;
   padding-top: 32px;
@@ -457,15 +562,44 @@ footer {
 
 @media (max-width: 880px) {
   .site-nav,
-  .nav-links,
   footer {
     align-items: flex-start;
     flex-direction: column;
   }
 
+  .site-nav {
+    align-items: center;
+    flex-direction: row;
+  }
+
+  .menu-toggle {
+    display: inline-flex;
+  }
+
   .nav-links {
-    gap: 2px;
-    margin-top: 12px;
+    align-items: stretch;
+    background: rgba(255, 250, 241, 0.96);
+    border: 1px solid rgba(29, 36, 32, 0.1);
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+    display: none;
+    flex-direction: column;
+    gap: 4px;
+    left: 24px;
+    margin-top: 0;
+    padding: 10px;
+    position: absolute;
+    right: 24px;
+    top: 72px;
+  }
+
+  .nav-links.is-open {
+    display: flex;
+  }
+
+  .nav-links a {
+    border-radius: 8px;
+    padding: 12px;
   }
 
   .hero,
@@ -483,13 +617,27 @@ footer {
 
   .portrait-wrap {
     justify-self: start;
-    max-width: 360px;
+    max-width: 330px;
   }
 
   .pill-grid,
-  .project-list,
+  .experience-card,
   .suggestions {
     grid-template-columns: 1fr;
+  }
+
+  .project-list,
+  .experience-list {
+    grid-auto-columns: minmax(280px, 86vw);
+  }
+
+  .experience-period {
+    text-align: left;
+  }
+
+  .chat-window {
+    max-height: 380px;
+    min-height: 264px;
   }
 
   h1 {
@@ -498,6 +646,10 @@ footer {
 
   .lead {
     font-size: 18px;
+  }
+
+  footer {
+    grid-template-columns: 1fr;
   }
 }
 
@@ -534,5 +686,9 @@ footer {
 
   .assistant-panel {
     padding: 16px;
+  }
+
+  .portrait-wrap {
+    max-width: 300px;
   }
 }

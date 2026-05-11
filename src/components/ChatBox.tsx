@@ -10,9 +10,9 @@ type ChatMessage = {
 };
 
 const suggestedQuestions = [
-  "What is this demo profile focused on?",
-  "Which machine learning projects are included?",
-  "How does the Gemini assistant work?",
+  "What is Xiyao's research direction?",
+  "Which machine learning projects has he completed?",
+  "What experience does he have in biomedical AI?",
 ];
 
 const initialMessages: ChatMessage[] = [
@@ -20,7 +20,7 @@ const initialMessages: ChatMessage[] = [
     id: "welcome",
     role: "assistant",
     content:
-      "Hi, I can answer questions about this sanitized AI portfolio demo, sample research interests, projects, and technical background.",
+      "Hi, I can help visitors learn about Xiyao Huang's education, research, projects, and technical background.",
   },
 ];
 
@@ -99,7 +99,7 @@ export function ChatBox() {
         </span>
         <div>
           <p className="eyebrow">AI Assistant</p>
-          <h2>Ask about the demo profile, projects, and research interests.</h2>
+          <h2>Ask about Xiyao's CV, projects, and research.</h2>
         </div>
       </div>
 
@@ -135,7 +135,7 @@ export function ChatBox() {
         <input
           maxLength={500}
           onChange={(event) => setInput(event.target.value)}
-          placeholder="Ask a question about the demo profile..."
+          placeholder="Ask a question about Xiyao..."
           value={input}
         />
         <button

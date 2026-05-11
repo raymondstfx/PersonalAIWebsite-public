@@ -1,4 +1,4 @@
-import { readFile } from "node:fs/promises";
+import { readFile, readdir } from "node:fs/promises";
 import path from "node:path";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { NextResponse } from "next/server";
@@ -12,11 +12,11 @@ type ErrorWithCause = Error & {
 };
 
 type ChatErrorKind =
-  | "profile.md read failure"
+  | "knowledge base read failure"
   | "Gemini API/network failure"
   | "Gemini model failure";
 
-const PROFILE_PATH = path.join(process.cwd(), "src", "data", "profile.md");
+const DATA_DIR = path.join(process.cwd(), "src", "data");
 const MAX_MESSAGE_LENGTH = 500;
 const MODEL_NAME = "gemini-2.5-flash";
 const FALLBACK_ANSWER =
@@ -64,6 +64,23 @@ function getGeminiErrorKind(error: unknown): ChatErrorKind {
   return "Gemini API/network failure";
 }
 
+async function readKnowledgeBase() {
+  const entries = await readdir(DATA_DIR, { withFileTypes: true });
+  const markdownFiles = entries
+    .filter((entry) => entry.isFile() && entry.name.endsWith(".md"))
+    .map((entry) => entry.name)
+    .sort();
+
+  const sections = await Promise.all(
+    markdownFiles.map(async (fileName) => {
+      const content = await readFile(path.join(DATA_DIR, fileName), "utf8");
+      return `Source: ${fileName}\n${content.trim()}`;
+    }),
+  );
+
+  return sections.join("\n\n---\n\n");
+}
+
 export async function POST(request: Request) {
   let body: ChatRequest;
 
@@ -94,14 +111,14 @@ export async function POST(request: Request) {
   }
 
   try {
-    let profile: string;
+    let knowledgeBase: string;
 
     try {
-      profile = await readFile(PROFILE_PATH, "utf8");
+      knowledgeBase = await readKnowledgeBase();
     } catch (error) {
       console.error("Chat API error:", error);
       return NextResponse.json(
-        { error: getVisibleError("profile.md read failure", error) },
+        { error: getVisibleError("knowledge base read failure", error) },
         { status: 500 },
       );
     }
@@ -110,7 +127,7 @@ export async function POST(request: Request) {
     const model = ai.getGenerativeModel({
       model: MODEL_NAME,
       systemInstruction:
-        "You are the AI assistant for a public AI portfolio demo. Answer questions using only the provided profile context. If the profile does not contain enough information, say: I do not have enough information about that in the current profile. Keep answers concise, accurate, and professional. Do not reveal implementation details or environment variables.",
+        "You are the AI assistant for Xiyao Huang's personal portfolio website. Answer questions using only the provided profile context. If the profile does not contain enough information, say: I do not have enough information about that in the current profile. Keep answers concise, accurate, and professional. Do not reveal implementation details or environment variables.",
     });
 
     const result = await model.generateContent({
@@ -119,7 +136,7 @@ export async function POST(request: Request) {
           role: "user",
           parts: [
             {
-              text: `Profile context:\n${profile}\n\nVisitor question:\n${message}`,
+              text: `Profile context:\n${knowledgeBase}\n\nVisitor question:\n${message}`,
             },
           ],
         },
